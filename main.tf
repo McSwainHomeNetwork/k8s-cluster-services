@@ -11,31 +11,33 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "k8s_ci_roles" {
+data "terraform_remote_state" "k8s_user_pki" {
   backend = "remote"
 
-  count = (length(var.k8s_host) > 0 || length(var.k8s_token) > 0 || length(var.k8s_cluster_ca_cert) > 0) ? 0 : 1
+  count = (length(var.k8s_client_certificate) > 0 || length(var.k8s_client_key) > 0 || length(var.k8s_cluster_ca_cert) > 0) ? 0 : 1
 
   config = {
     organization = "McSwainHomeNetwork"
     workspaces = {
-      name = "k8s-ci-roles"
+      name = "k8s-user-pki"
     }
   }
 }
 
 provider "helm" {
   kubernetes {
-    host                   = length(var.k8s_host) > 0 ? var.k8s_host : data.terraform_remote_state.k8s_ci_roles[0].outputs.host
-    token                  = length(var.k8s_token) > 0 ? var.k8s_token : data.terraform_remote_state.k8s_ci_roles[0].outputs.token
-    cluster_ca_certificate = length(var.k8s_cluster_ca_cert) > 0 ? var.k8s_cluster_ca_cert : data.terraform_remote_state.k8s_ci_roles[0].outputs.cluster_ca_certificate
+    host                   = var.k8s_host
+    client_certificate     = length(var.k8s_client_certificate) > 0 ? var.k8s_client_certificate : data.terraform_remote_state.k8s_user_pki[0].outputs.ci_user_cert_pem
+    client_key             = length(var.k8s_client_key) > 0 ? var.k8s_client_key : data.terraform_remote_state.k8s_user_pki[0].outputs.ci_user_key_pem
+    cluster_ca_certificate = length(var.k8s_cluster_ca_cert) > 0 ? var.k8s_cluster_ca_cert : data.terraform_remote_state.k8s_user_pki[0].outputs.ca_cert_pem
   }
 }
 
 provider "kubernetes" {
-  host                   = length(var.k8s_host) > 0 ? var.k8s_host : data.terraform_remote_state.k8s_ci_roles[0].outputs.host
-  token                  = length(var.k8s_token) > 0 ? var.k8s_token : data.terraform_remote_state.k8s_ci_roles[0].outputs.token
-  cluster_ca_certificate = length(var.k8s_cluster_ca_cert) > 0 ? var.k8s_cluster_ca_cert : data.terraform_remote_state.k8s_ci_roles[0].outputs.cluster_ca_certificate
+  host                   = var.k8s_host
+  client_certificate     = length(var.k8s_client_certificate) > 0 ? var.k8s_client_certificate : data.terraform_remote_state.k8s_user_pki[0].outputs.ci_user_cert_pem
+  client_key             = length(var.k8s_client_key) > 0 ? var.k8s_client_key : data.terraform_remote_state.k8s_user_pki[0].outputs.ci_user_key_pem
+  cluster_ca_certificate = length(var.k8s_cluster_ca_cert) > 0 ? var.k8s_cluster_ca_cert : data.terraform_remote_state.k8s_user_pki[0].outputs.ca_cert_pem
 }
 
 module "metallb" {
