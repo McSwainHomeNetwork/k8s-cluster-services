@@ -7,7 +7,7 @@ variable "k8s_host" {
 variable "k8s_client_key" {
   type        = string
   default     = ""
-  description = "Token to auth with the k8s host."
+  description = "Private key by which to auth with the k8s host."
   sensitive   = true
 }
 
