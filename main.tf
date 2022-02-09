@@ -14,7 +14,7 @@ terraform {
 data "terraform_remote_state" "k8s_user_pki" {
   backend = "remote"
 
-  count = (length(var.k8s_client_certificate) > 0 || length(var.k8s_client_key) > 0 || length(var.k8s_cluster_ca_cert) > 0) ? 0 : 1
+  count = (length(var.k8s_client_certificate) > 0 && length(var.k8s_client_key) > 0 && length(var.k8s_cluster_ca_cert) > 0) ? 0 : 1
 
   config = {
     organization = "McSwainHomeNetwork"
