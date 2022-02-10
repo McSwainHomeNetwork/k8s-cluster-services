@@ -11,6 +11,10 @@ terraform {
   }
 }
 
+locals {
+  domain_name = "mcswain.dev"
+}
+
 data "terraform_remote_state" "k8s_user_pki" {
   backend = "remote"
 
@@ -82,4 +86,19 @@ module "nginx_ingress" {
   }
 
   depends_on = [module.metallb]
+}
+
+module "external_services" {
+  source = "./modules/external-services"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
+
+  plex_ip           = "192.168.1.138"
+  home_assistant_ip = "192.168.1.19"
+  domain_name       = local.domain_name
+
+  depends_on = [module.nginx_ingress, module.cert_manager_clusterissuers]
 }

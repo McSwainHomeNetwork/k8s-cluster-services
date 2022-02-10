@@ -17,6 +17,6 @@ This list is comprehensive as of writing, but will drift and shall serve as an e
 - cert-manager <https://cert-manager.io/docs/> + a DDNS and ACME HTTP challenge ClusterIssuers
 - MetalLB <https://metallb.universe.tf/> in ARP mode as the hosting network is VLAN-ed
 - ses-email-service <https://github.com/USA-RedDragon/ses-email-service>
-- static service mapping (basically, add accessible names to services external to the cluster that may be shared via an `Endpoints` object, a Service, and an Ingress)
+- external service mapping (basically, add accessible names to services external to the cluster that may be shared via an `Endpoints` object, a Service, and an Ingress)
 
 Each deployment herein should be completely production-ready and include a mechanism for metrics collection where available and backups where persistent data is stored, including the configuration (if configuration is in a ConfigMap rather than a PVC, this is sufficient to be collected by flat yaml backups of the cluster). Internal services may be exposed via the main load balancer, as long as they are filtered through oauth2-proxy. PodSecurityPolicies and NetworkPolicies should be used where applicable.
