@@ -2,6 +2,8 @@
 
 A set of Terraform configurations to deploy services that typical kubernetes cluster clients might like to utilize. The target cluster in this configuration is a deployment of <https://github.com/McSwainHomeNetwork/proxmox-k3s-server>
 
+Note: Cert-manager requires CRDs to be installed prior to using this. This is because a Terraform plan will attempt to check CRDs against local manifests, and we use ClusterIssuer.
+
 This list is comprehensive as of writing, but will drift and shall serve as an example of some services that might fit in this repo:
 - Linkerd <https://linkerd.io/>
 - NGINX Ingress Controller <https://kubernetes.github.io/ingress-nginx/>

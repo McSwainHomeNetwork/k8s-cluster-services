@@ -49,7 +49,15 @@ module "metallb" {
   }
 }
 
-module "nginx-ingress" {
+module "cert_manager" {
+  source = "./modules/cert-manager"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
+}
+
   source = "./modules/nginx-ingress"
 
   providers = {
