@@ -1,0 +1,65 @@
+driver: freenas-nfs
+instance_id:
+httpConnection:
+  protocol: ${freenas_protocol}
+  host: ${freenas_address}
+  port: ${freenas_http_port}
+  username: ${freenas_username}
+  password: ${freenas_password}
+  allowInsecure: true
+  # use apiVersion 2 for TrueNAS-12 and up (will work on 11.x in some scenarios as well)
+  # leave unset for auto-detection
+  apiVersion: 2
+sshConnection:
+  host: ${freenas_address}
+  port: 22
+  username: ${freenas_username}
+  password: ${freenas_password}
+zfs:
+  cli:
+    sudoEnabled: true
+
+  datasetParentName: data/K8S/nfs
+  datasetEnableQuotas: true
+  datasetEnableReservation: false
+  datasetPermissionsMode: "0777"
+  datasetPermissionsUser: root
+  datasetPermissionsGroup: wheel
+  datasetPermissionsAcls:
+  - "-m u:k8s:full_set:allow"
+
+nfs:
+  shareHost: ${freenas_address}
+  shareAlldirs: false
+  shareAllowedHosts: []
+  shareAllowedNetworks: []
+  shareMaprootUser: root
+  shareMaprootGroup: wheel
+  shareMapallUser: ""
+  shareMapallGroup: ""
+
+storageClasses:
+- name: nfs
+  defaultClass: true
+  reclaimPolicy: Delete
+  volumeBindingMode: Immediate
+  allowVolumeExpansion: true
+  parameters:
+    fsType: nfs
+
+  mountOptions:
+  - noatime
+  - nfsvers=4.1
+  secrets:
+    provisioner-secret:
+    controller-publish-secret:
+    node-stage-secret:
+    node-publish-secret:
+    controller-expand-secret:
+
+volumeSnapshotClasses:
+  - name: nfs
+    parameters:
+    detachedSnapshots: false
+    secrets:
+      snapshotter-secret:

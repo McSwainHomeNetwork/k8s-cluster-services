@@ -102,3 +102,21 @@ module "external_services" {
 
   depends_on = [module.nginx_ingress, module.cert_manager_clusterissuers]
 }
+
+module "democratic_csi" {
+  source = "./modules/democratic-csi"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
+
+  freenas_protocol           = var.freenas_protocol
+  freenas_address = var.freenas_address
+  freenas_username       = var.freenas_username
+  freenas_password       = var.freenas_password
+  freenas_http_port       = var.freenas_http_port
+  freenas_iscsi_port       = var.freenas_iscsi_port
+
+  depends_on = [module.nginx_ingress, module.cert_manager_clusterissuers]
+}
