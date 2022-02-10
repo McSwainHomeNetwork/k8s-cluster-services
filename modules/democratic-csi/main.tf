@@ -40,27 +40,74 @@ locals {
   }
 }
 
+resource "kubernetes_namespace_v1" "democratic_csi" {
+  metadata {
+    name = "democratic-csi"
+  }
+}
+
+resource "kubernetes_pod_security_policy_v1beta1" "unrestricted" {
+  metadata {
+    name = "democratic-csi-unrestricted"
+    namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
+  }
+  spec {
+    privileged                 = true
+    allow_privilege_escalation = false
+
+    allowed_capabilities = [
+      "SYS_ADMIN"
+    ]
+
+    volumes = [
+      "configMap",
+      "emptyDir",
+      "projected",
+      "secret",
+      "downwardAPI",
+      "persistentVolumeClaim",
+    ]
+
+    run_as_user {
+      rule = "RunAsAny"
+    }
+
+    se_linux {
+      rule = "RunAsAny"
+    }
+
+    supplemental_groups {
+      rule = "RunAsAny"
+    }
+
+    fs_group {
+      rule = "RunAsAny"
+    }
+
+    read_only_root_filesystem = false
+  }
+}
+
 resource "helm_release" "democratic_csi_nfs" {
   name       = "democratic-csi-nfs"
   repository = "https://democratic-csi.github.io/charts/"
   chart      = "democratic-csi"
-  version    = "1.7.1"
-  namespace = "democratic-csi"
-  create_namespace = true
+  version    = "0.10.0"
+  namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
 
-  values = [templatefile("nfs.yaml"), local.templates]
+  values = [templatefile("${path.module}/nfs.yaml", local.templates)]
 
-  depends_on = [helm_release.snapshot_controller]
+  depends_on = [helm_release.snapshot_controller, kubernetes_pod_security_policy_v1beta1.unrestricted]
 }
 
 resource "helm_release" "democratic_csi_iscsi" {
   name       = "democratic-csi-iscsi"
   repository = "https://democratic-csi.github.io/charts/"
   chart      = "democratic-csi"
-  version    = "1.7.1"
-  namespace = "democratic-csi"
+  version    = "0.1.0"
+  namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
 
-  values = [templatefile("iscsi.yaml"), local.templates]
+  values = [templatefile("${path.module}/iscsi.yaml", local.templates)]
 
-  depends_on = [helm_release.snapshot_controller, helm_release.democratic_csi_nfs]
+  depends_on = [helm_release.snapshot_controller, kubernetes_pod_security_policy_v1beta1.unrestricted]
 }

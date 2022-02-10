@@ -5,12 +5,13 @@ A set of Terraform configurations to deploy services that typical kubernetes clu
 Note: Cert-manager requires CRDs to be installed prior to using this. This is because a Terraform plan will attempt to check CRDs against local manifests, and we use ClusterIssuer.
 
 This list is comprehensive as of writing, but will drift and shall serve as an example of some services that might fit in this repo:
+
 - NGINX Ingress Controller <https://kubernetes.github.io/ingress-nginx/>
 - PostgreSQL <https://www.postgresql.org/>
 - MariaDB <https://mariadb.org/>
 - democratic-csi <https://github.com/democratic-csi/democratic-csi> + NFS and iSCSI StorageClasses with NFS being the default.
 - backups (includes whole-cluster flat yaml backups, etcd backups, Velero <https://velero.io/>, etc)
-- Prometheus <https://prometheus.io/> + AlertManager + 
+- Prometheus <https://prometheus.io/>
 - Grafana <https://grafana.com/> + Loki <https://grafana.com/oss/loki/>
 - node_exporter <https://github.com/prometheus/node_exporter>
 - Keycloak <https://www.keycloak.org/> + oauth2-proxy <https://github.com/oauth2-proxy/oauth2-proxy>
