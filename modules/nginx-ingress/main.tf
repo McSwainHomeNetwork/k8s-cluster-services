@@ -41,11 +41,6 @@ resource "helm_release" "nginx" {
   }
 
   set {
-    name  = "podSecurityPolicy.enabled"
-    value = "true"
-  }
-
-  set {
     name  = "defaultBackend.enabled"
     value = "true"
   }

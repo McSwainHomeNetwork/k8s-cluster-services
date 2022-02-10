@@ -24,14 +24,4 @@ resource "helm_release" "cert_manager" {
     name = "installCRDs"
     value = "false"
   }
-
-  set {
-    name  = "global.podSecurityPolicy.enabled"
-    value = "true"
-  }
-
-  set {
-    name = "global.podSecurityPolicy.useAppArmor"
-    value = "false"
-  }
 }

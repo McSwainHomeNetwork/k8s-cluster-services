@@ -25,6 +25,11 @@ resource "helm_release" "metallb" {
   }
 
   set {
+    name  = "psp.create"
+    value = "false"
+  }
+
+  set {
     name  = "configInline.address-pools[0].name"
     value = "default"
     type  = "string"

@@ -46,48 +46,6 @@ resource "kubernetes_namespace_v1" "democratic_csi" {
   }
 }
 
-resource "kubernetes_pod_security_policy_v1beta1" "unrestricted" {
-  metadata {
-    name = "democratic-csi-unrestricted"
-    namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
-  }
-  spec {
-    privileged                 = true
-    allow_privilege_escalation = false
-
-    allowed_capabilities = [
-      "SYS_ADMIN"
-    ]
-
-    volumes = [
-      "configMap",
-      "emptyDir",
-      "projected",
-      "secret",
-      "downwardAPI",
-      "persistentVolumeClaim",
-    ]
-
-    run_as_user {
-      rule = "RunAsAny"
-    }
-
-    se_linux {
-      rule = "RunAsAny"
-    }
-
-    supplemental_groups {
-      rule = "RunAsAny"
-    }
-
-    fs_group {
-      rule = "RunAsAny"
-    }
-
-    read_only_root_filesystem = false
-  }
-}
-
 resource "helm_release" "democratic_csi_nfs" {
   name       = "democratic-csi-nfs"
   repository = "https://democratic-csi.github.io/charts/"
@@ -96,8 +54,6 @@ resource "helm_release" "democratic_csi_nfs" {
   namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
 
   values = [templatefile("${path.module}/nfs.yaml", local.templates)]
-
-  depends_on = [helm_release.snapshot_controller, kubernetes_pod_security_policy_v1beta1.unrestricted]
 }
 
 resource "helm_release" "democratic_csi_iscsi" {
@@ -108,6 +64,4 @@ resource "helm_release" "democratic_csi_iscsi" {
   namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
 
   values = [templatefile("${path.module}/iscsi.yaml", local.templates)]
-
-  depends_on = [helm_release.snapshot_controller, kubernetes_pod_security_policy_v1beta1.unrestricted]
 }
