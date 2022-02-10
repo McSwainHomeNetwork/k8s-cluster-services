@@ -5,7 +5,6 @@ A set of Terraform configurations to deploy services that typical kubernetes clu
 Note: Cert-manager requires CRDs to be installed prior to using this. This is because a Terraform plan will attempt to check CRDs against local manifests, and we use ClusterIssuer.
 
 This list is comprehensive as of writing, but will drift and shall serve as an example of some services that might fit in this repo:
-- Linkerd <https://linkerd.io/>
 - NGINX Ingress Controller <https://kubernetes.github.io/ingress-nginx/>
 - PostgreSQL <https://www.postgresql.org/>
 - MariaDB <https://mariadb.org/>

@@ -58,6 +58,22 @@ module "cert_manager" {
   }
 }
 
+module "cert_manager_clusterissuers" {
+  source = "./modules/cert-manager-clusterissuers"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
+
+  acme_email_address       = var.acme_email_address
+  cloudflare_email_address = var.cloudflare_email_address
+  cloudflare_api_key       = var.cloudflare_api_key
+
+  depends_on = [module.cert_manager]
+}
+
+module "nginx_ingress" {
   source = "./modules/nginx-ingress"
 
   providers = {
