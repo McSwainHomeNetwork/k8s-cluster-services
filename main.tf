@@ -120,3 +120,12 @@ module "democratic_csi" {
 
   depends_on = [module.nginx_ingress, module.cert_manager_clusterissuers]
 }
+
+module "redis" {
+  source = "./modules/redis"
+
+  providers = {
+    helm       = helm
+    kubernetes = kubernetes
+  }
+}
