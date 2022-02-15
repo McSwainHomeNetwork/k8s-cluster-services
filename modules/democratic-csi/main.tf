@@ -60,7 +60,7 @@ resource "helm_release" "democratic_csi_iscsi" {
   name       = "democratic-csi-iscsi"
   repository = "https://democratic-csi.github.io/charts/"
   chart      = "democratic-csi"
-  version    = "0.1.0"
+  version    = "0.10.0"
   namespace = kubernetes_namespace_v1.democratic_csi.metadata.0.name
 
   values = [templatefile("${path.module}/iscsi.yaml", local.templates)]

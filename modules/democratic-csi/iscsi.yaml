@@ -2,6 +2,10 @@ csiDriver:
   # should be globally unique for a given cluster
   name: "org.democratic-csi.iscsi"
 
+node:
+  driver:
+    localtimeHostPath: null
+
 driver:
   config:
     driver: freenas-iscsi
@@ -26,6 +30,7 @@ driver:
         sudoEnabled: true
 
       datasetParentName: data/K8S/iscsi
+      detachedSnapshotsDatasetParentName: data/backups
       # "" (inherit), lz4, gzip-9, etc
       zvolCompression: ""
       # "" (inherit), on, off, verify
@@ -67,7 +72,7 @@ driver:
 storageClasses:
 - name: iscsi
   defaultClass: false
-  reclaimPolicy: Delete
+  reclaimPolicy: Retain
   volumeBindingMode: Immediate
   allowVolumeExpansion: true
   parameters:
@@ -88,6 +93,6 @@ storageClasses:
 volumeSnapshotClasses:
   - name: iscsi
     parameters:
-    detachedSnapshots: false
+      detachedSnapshots: false
     secrets:
       snapshotter-secret:
