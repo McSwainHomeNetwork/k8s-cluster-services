@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "2.4.1"
     }
     kubernetes = {
@@ -12,11 +12,11 @@ terraform {
 }
 
 resource "helm_release" "metallb" {
-  name       = "metallb"
-  repository = "https://metallb.github.io/metallb"
-  chart      = "metallb"
-  version    = "0.11.0"
-  namespace = "metallb"
+  name             = "metallb"
+  repository       = "https://metallb.github.io/metallb"
+  chart            = "metallb"
+  version          = "0.11.0"
+  namespace        = "metallb"
   create_namespace = true
 
   set {

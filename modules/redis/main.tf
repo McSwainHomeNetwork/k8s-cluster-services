@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     helm = {
-      source = "hashicorp/helm"
+      source  = "hashicorp/helm"
       version = "2.4.1"
     }
     kubernetes = {
@@ -12,11 +12,11 @@ terraform {
 }
 
 resource "helm_release" "redis" {
-  name       = "redis"
-  repository = "https://usa-reddragon.github.io/helm-charts"
-  chart      = "app"
-  version    = "0.1.7"
-  namespace = "redis"
+  name             = "redis"
+  repository       = "https://usa-reddragon.github.io/helm-charts"
+  chart            = "app"
+  version          = "0.1.7"
+  namespace        = "redis"
   create_namespace = true
 
   set {
