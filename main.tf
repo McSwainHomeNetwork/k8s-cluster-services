@@ -97,6 +97,8 @@ module "external_services" {
   }
 
   plex_ip           = "192.168.1.138"
+  prometheus_ip     = "192.168.1.18"
+  grafana_ip        = "192.168.1.18"
   home_assistant_ip = "192.168.1.19"
   domain_name       = local.domain_name
 
@@ -111,12 +113,12 @@ module "democratic_csi" {
     kubernetes = kubernetes
   }
 
-  freenas_protocol           = var.freenas_protocol
-  freenas_address = var.freenas_address
-  freenas_username       = var.freenas_username
-  freenas_password       = var.freenas_password
-  freenas_http_port       = var.freenas_http_port
-  freenas_iscsi_port       = var.freenas_iscsi_port
+  freenas_protocol   = var.freenas_protocol
+  freenas_address    = var.freenas_address
+  freenas_username   = var.freenas_username
+  freenas_password   = var.freenas_password
+  freenas_http_port  = var.freenas_http_port
+  freenas_iscsi_port = var.freenas_iscsi_port
 
   depends_on = [module.nginx_ingress, module.cert_manager_clusterissuers]
 }

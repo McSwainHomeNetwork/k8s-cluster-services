@@ -44,27 +44,27 @@ variable "cloudflare_api_key" {
 }
 
 variable "freenas_protocol" {
-  type = string
+  type    = string
   default = "http"
 }
 
 variable "freenas_address" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "freenas_username" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "freenas_password" {
-  type = string
+  type      = string
   sensitive = true
 }
 
 variable "freenas_http_port" {
-  type = string
+  type    = string
   default = "80"
 }
 
